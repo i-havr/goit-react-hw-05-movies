@@ -7,14 +7,17 @@ import {
 
 export default function MoviesList({ movies, add }) {
   return (
-    <MoviesListStyled>
-      {movies?.map(movie => (
-        <MovieListItemWrapper key={movie.id}>
-          <LinkStyled to={`${add}${movie.id}`}>
-            <MovieName>{movie.title}</MovieName>
-          </LinkStyled>
-        </MovieListItemWrapper>
-      ))}
-    </MoviesListStyled>
+    <>
+      <h2>fghj</h2>
+      <MoviesListStyled>
+        {movies?.map(movie => (
+          <MovieListItemWrapper key={movie.id}>
+            <LinkStyled to={`${add}${movie.id}`}>
+              <MovieName>{movie.title}</MovieName>
+            </LinkStyled>
+          </MovieListItemWrapper>
+        ))}
+      </MoviesListStyled>
+    </>
   );
 }
