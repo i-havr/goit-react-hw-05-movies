@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+export const TrendingTitleStyled = styled.h1`
+  font-size: 24px;
+  padding: 0 0 0 40px;
+`;
+
 export const MoviesListStyled = styled.ul`
   padding: 20px 40px;
   list-style: none;

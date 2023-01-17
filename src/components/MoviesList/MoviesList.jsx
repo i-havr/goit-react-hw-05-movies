@@ -1,4 +1,5 @@
 import {
+  TrendingTitleStyled,
   MoviesListStyled,
   MovieListItemWrapper,
   MovieName,
@@ -8,7 +9,7 @@ import {
 export default function MoviesList({ movies, add }) {
   return (
     <>
-      <h2>fghj</h2>
+      <TrendingTitleStyled>Trending today</TrendingTitleStyled>
       <MoviesListStyled>
         {movies?.map(movie => (
           <MovieListItemWrapper key={movie.id}>
