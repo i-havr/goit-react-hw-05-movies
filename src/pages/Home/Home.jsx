@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import MoviesList from 'components/MoviesList/MoviesList';
-import { HomeStyled } from './Home.styled';
+import { HomeStyled, TrendingTitleStyled } from './Home.styled';
 import fetchFilms from 'servises/fetchApi';
 import { toast } from 'react-toastify';
 
@@ -22,11 +22,14 @@ export default function Home() {
     getMovies();
   }, []);
 
-  return (
-    <HomeStyled>
-      {movies && <MoviesList movies={movies} add={add}></MoviesList>}
-    </HomeStyled>
-  );
+  if (movies) {
+    return (
+      <HomeStyled>
+        <TrendingTitleStyled>Trending today</TrendingTitleStyled>
+        {movies && <MoviesList movies={movies} add={add}></MoviesList>}
+      </HomeStyled>
+    );
+  }
 }
 
 // Home.propTypes = {

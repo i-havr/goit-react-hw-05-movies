@@ -1,5 +1,5 @@
+import { useLocation } from 'react-router-dom';
 import {
-  TrendingTitleStyled,
   MoviesListStyled,
   MovieListItemWrapper,
   MovieName,
@@ -7,18 +7,16 @@ import {
 } from './MoviesList.styled';
 
 export default function MoviesList({ movies, add }) {
+  const location = useLocation();
   return (
-    <>
-      <TrendingTitleStyled>Trending today</TrendingTitleStyled>
-      <MoviesListStyled>
-        {movies?.map(movie => (
-          <MovieListItemWrapper key={movie.id}>
-            <LinkStyled to={`${add}${movie.id}`}>
-              <MovieName>{movie.title}</MovieName>
-            </LinkStyled>
-          </MovieListItemWrapper>
-        ))}
-      </MoviesListStyled>
-    </>
+    <MoviesListStyled>
+      {movies?.map(movie => (
+        <MovieListItemWrapper key={movie.id}>
+          <LinkStyled to={`${add}${movie.id}`} state={{ from: location }}>
+            <MovieName>{movie.title}</MovieName>
+          </LinkStyled>
+        </MovieListItemWrapper>
+      ))}
+    </MoviesListStyled>
   );
 }

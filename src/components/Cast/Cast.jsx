@@ -22,26 +22,31 @@ export default function Cast({ id }) {
     };
     getActors();
   }, [query]);
+
   if (actors) {
     return (
       <CastStyled>
-        <CastListStyled>
-          {actors.map(({ id, name, character, profile_path }) => (
-            <CastItemStyled key={id}>
-              {profile_path ? (
-                <img src={photoPathBase + profile_path} alt={name} />
-              ) : (
-                <img src={notFoundImage} alt={name} />
-              )}
-              <ActorNameStyled>{name}</ActorNameStyled>
-              <CharacterStyled>
-                Character:
-                <br />
-                {character}
-              </CharacterStyled>
-            </CastItemStyled>
-          ))}
-        </CastListStyled>
+        {actors.length === 0 ? (
+          <p>There is no information to display</p>
+        ) : (
+          <CastListStyled>
+            {actors.map(({ id, name, character, profile_path }) => (
+              <CastItemStyled key={id}>
+                {profile_path ? (
+                  <img src={photoPathBase + profile_path} alt={name} />
+                ) : (
+                  <img src={notFoundImage} alt={name} />
+                )}
+                <ActorNameStyled>{name}</ActorNameStyled>
+                <CharacterStyled>
+                  Character:
+                  <br />
+                  {character}
+                </CharacterStyled>
+              </CastItemStyled>
+            ))}
+          </CastListStyled>
+        )}
       </CastStyled>
     );
   }

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const NotFoundStyled = styled.div`
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,4 +26,8 @@ export const TextStyled = styled.p`
 
 export const ReloadButton = styled.button`
   padding: 5px;
+`;
+
+export const LinkStyled = styled(Link)`
+  text-decoration: none;
 `;

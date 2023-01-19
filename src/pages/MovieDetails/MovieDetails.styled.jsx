@@ -11,6 +11,7 @@ export const MovieInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: start;
+  margin-top: 20px;
   margin-bottom: 20px;
   padding-right: 10%;
 `;
@@ -86,4 +87,12 @@ export const AdditionalList = styled.ul`
 export const LinkStyled = styled(Link)`
   text-decoration: none;
   color: black;
+`;
+
+export const LinkButtonStyled = styled(Link)`
+  text-decoration: none;
+  & > button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
 `;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const IconButtonStyled = styled.button`
+export const ButtonStyled = styled.button`
   /* display: inline-block;
   width: 48px;
   height: 48px;

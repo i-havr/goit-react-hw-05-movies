@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import MoviesList from 'components/MoviesList/MoviesList';
@@ -8,16 +9,17 @@ import { MoviesStyled } from './Movies.styled';
 
 export default function Movies() {
   const [movies, setMovies] = useState(null);
-  const [query, setQuery] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') ?? '';
   const add = '';
 
   const handleSubmit = query => {
     setMovies(null);
-    setQuery(query);
+    setSearchParams({ query: query });
   };
 
   useEffect(() => {
-    if (!query) {
+    if (query === '') {
       return;
     }
 
