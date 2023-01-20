@@ -6,11 +6,6 @@ export const Button = ({ children }) => {
   return <ButtonStyled type="button">{children}</ButtonStyled>;
 };
 
-Button.defaultProps = {
-  onClick: () => null,
-  children: null,
-};
-
 Button.propTypes = {
   children: PropTypes.node,
 };

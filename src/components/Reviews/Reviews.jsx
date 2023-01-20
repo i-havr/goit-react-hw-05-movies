@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
-import fetchFilms from 'servises/fetchApi';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   ReviewsStyled,
   ReviewsListStyled,
@@ -9,18 +9,24 @@ import {
   ReviewContentStyled,
   ReviewDateStyled,
 } from './Reviews.styled';
+import { getReviewsById } from 'services/MovieApi';
 
-export default function Reviews({ id }) {
+export default function Reviews() {
   const [reviews, setReviews] = useState(null);
-  const query = `movie/${id}/reviews`;
+  const { movieId } = useParams();
 
   useEffect(() => {
     const getReviews = async () => {
-      const { results } = await fetchFilms(query);
-      setReviews(results);
+      try {
+        const reviews = await getReviewsById(movieId);
+        setReviews(reviews);
+      } catch (error) {
+        toast.error('Whoops, something went wrong ', error.message);
+        return;
+      }
     };
     getReviews();
-  }, [query]);
+  }, [movieId]);
 
   return (
     <ReviewsStyled>
@@ -44,7 +50,3 @@ export default function Reviews({ id }) {
     </ReviewsStyled>
   );
 }
-
-Reviews.propTypes = {
-  //   onSubmit: PropTypes.func.isRequired,
-};

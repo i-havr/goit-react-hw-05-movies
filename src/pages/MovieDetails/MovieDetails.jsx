@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { HiArrowLeft } from 'react-icons/hi';
+import { useState, useEffect, Suspense } from 'react';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
-// import PropTypes from 'prop-types';
+import { HiArrowLeft } from 'react-icons/hi';
+import { toast } from 'react-toastify';
 import {
   MovieDetailsStyled,
   MovieInfo,
@@ -19,45 +19,48 @@ import {
   Genres,
 } from './MovieDetails.styled';
 import { Button } from '../../components/Button/Button';
-import fetchFilms from 'servises/fetchApi';
+import { getMovieById } from 'services/MovieApi';
+import { Loader } from 'components/Loader/Loader';
+import notFoundImage from '../../images/image-not-found.jpg';
 
-export default function MovieDetails({ getMovieId }) {
-  const [film, setFilm] = useState(null);
+export default function MovieDetails() {
   const { movieId } = useParams();
+  const [film, setFilm] = useState(null);
   const location = useLocation();
-  const backLinkHref = location.state?.from ?? '/';
+  const goBack = location.state?.from ?? '/';
 
   const posterPathBase = 'https://image.tmdb.org/t/p/w500';
 
   useEffect(() => {
     const getFilm = async () => {
       try {
-        const query = `movie/${movieId}`;
-        const film = await fetchFilms(query);
+        const film = await getMovieById(movieId);
         setFilm(film);
-        getMovieId(movieId);
       } catch (error) {
-        console.log(error.message);
+        toast.error('Whoops, something went wrong ', error.message);
+        return;
       }
     };
     getFilm();
-  }, [getMovieId, movieId]);
-
-  useEffect(() => {}, [film]);
+  }, [movieId]);
 
   if (film) {
     const { title, release_date, poster_path, overview, vote_average, genres } =
       film;
     return (
       <MovieDetailsStyled>
-        <LinkButtonStyled to={backLinkHref}>
+        <LinkButtonStyled to={goBack}>
           <Button>
             <HiArrowLeft size="14" />
             {'\u202f'} Go back
           </Button>
         </LinkButtonStyled>
         <MovieInfo>
-          <img src={posterPathBase + poster_path} alt={title} width={250} />
+          {!poster_path ? (
+            <img src={notFoundImage} alt="Poster not found" width={250} />
+          ) : (
+            <img src={posterPathBase + poster_path} alt={title} width={250} />
+          )}
           <MovieDescription>
             <FilmTitle>
               {title} ({release_date.slice(0, 4)})
@@ -74,19 +77,21 @@ export default function MovieDetails({ getMovieId }) {
           <AdditionalTitle>Additional information</AdditionalTitle>
           <AdditionalList>
             <li>
-              <LinkStyled to="cast">Cast</LinkStyled>
+              <LinkStyled to="cast" state={{ from: location.state?.from }}>
+                Cast
+              </LinkStyled>
             </li>
             <li>
-              <LinkStyled to="reviews">Reviews</LinkStyled>
+              <LinkStyled to="reviews" state={{ from: location.state?.from }}>
+                Reviews
+              </LinkStyled>
             </li>
           </AdditionalList>
-          <Outlet />
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </AdditionalContainer>
       </MovieDetailsStyled>
     );
   }
 }
-
-MovieDetails.propTypes = {
-  //   onSubmit: PropTypes.func.isRequired,
-};

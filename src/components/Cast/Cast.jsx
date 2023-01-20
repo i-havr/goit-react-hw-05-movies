@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   CastStyled,
   CastListStyled,
@@ -7,51 +8,51 @@ import {
   ActorNameStyled,
   CharacterStyled,
 } from './Cast.styled';
-import fetchFilms from 'servises/fetchApi';
+import { getCreditsById } from 'services/MovieApi';
 import notFoundImage from '../../images/image-not-found.jpg';
 
-export default function Cast({ id }) {
+export default function Cast() {
   const [actors, setCredits] = useState(null);
-  const query = `movie/${id}/credits`;
+  const { movieId } = useParams();
+
   const photoPathBase = 'https://image.tmdb.org/t/p/w500';
 
   useEffect(() => {
     const getActors = async () => {
-      const { cast } = await fetchFilms(query);
-      setCredits(cast);
+      try {
+        const { cast } = await getCreditsById(movieId);
+        setCredits(cast);
+      } catch (error) {
+        toast.error('Whoops, something went wrong ', error.message);
+        return;
+      }
     };
     getActors();
-  }, [query]);
+  }, [movieId]);
 
-  if (actors) {
-    return (
-      <CastStyled>
-        {actors.length === 0 ? (
-          <p>There is no information to display</p>
-        ) : (
-          <CastListStyled>
-            {actors.map(({ id, name, character, profile_path }) => (
-              <CastItemStyled key={id}>
-                {profile_path ? (
-                  <img src={photoPathBase + profile_path} alt={name} />
-                ) : (
-                  <img src={notFoundImage} alt={name} />
-                )}
-                <ActorNameStyled>{name}</ActorNameStyled>
-                <CharacterStyled>
-                  Character:
-                  <br />
-                  {character}
-                </CharacterStyled>
-              </CastItemStyled>
-            ))}
-          </CastListStyled>
-        )}
-      </CastStyled>
-    );
-  }
+  return (
+    <CastStyled>
+      {actors?.length === 0 ? (
+        <p>There is no information to display</p>
+      ) : (
+        <CastListStyled>
+          {actors?.map(({ credit_id, name, character, profile_path }) => (
+            <CastItemStyled key={credit_id}>
+              {profile_path ? (
+                <img src={photoPathBase + profile_path} alt={name} />
+              ) : (
+                <img src={notFoundImage} alt="Not found" />
+              )}
+              <ActorNameStyled>{name}</ActorNameStyled>
+              <CharacterStyled>
+                Character:
+                <br />
+                {character}
+              </CharacterStyled>
+            </CastItemStyled>
+          ))}
+        </CastListStyled>
+      )}
+    </CastStyled>
+  );
 }
-
-Cast.propTypes = {
-  //   onSubmit: PropTypes.func.isRequired,
-};
